@@ -1,91 +1,104 @@
-{%extends 'localadmin/base.html'%}
-{%block title%}Logs{%endblock title%}
-{%block page_header%}1.0 Documentation{%endblock page_header%}
-{%block content%}
-    <p>Welcome to the Devock documentation! Here you will find all the information you need to get started with Devock and make the most of its features.</p>
-    <p>
-        Malware attacks on devices increase per day especially on devices owned by big industries as in the case of ransomwares. After studying
-        the nature of these attacks, I realized that 60-70% of these attacks are caused by the owners/handlers of these devices, either by downloading a file without
-        checking it out first. Although I wouldn't blame all cause not everyone understands this things.
-        Now, this is where Devock comes in; Devock Antivirus is a project that helps prevent these malicious software from infecting a device.
-        Although, this version is specific to Linux but we're cooking up something for windows and Mac OS, it will be released as soon as it's done.
-    
-    </p>
+{% extends 'localadmin/base.html' %}
+{% block title %}Logs{% endblock title %}
+{% block page_header %}1.0 Documentation{% endblock page_header %}
+{% block content %}
+<p>Welcome to the Devock documentation! Here you’ll find all the information you need to get started with Devock and make the most of its features.</p>
 
-    <br><br>
-    <h3>What Devock Does</h3>
-    <p>
-        Devock operates at the network level, using a python module <b>mitmproxy</b> which allows it to listen and intercept traffic going and coming into a device.
-        Devock listens for response from servers, checks if the response is an application/file that is being downloaded then intercepts the traffic and copies the
-        bytes of the file. Once copied, it writes the bytes to a file and quarantines that file in the directory <b>/mnt/quarantine1</b>. After quarantine, it scans the
-        file using <b>clamscan</b> (Clam Antivirus--Which is a malware scanner) which would check for known malware signatures.
-        If any malware signatures were found, it returns FOUND else OK. If the file is safe, it would be moved to the user's Download Folder else it would be deleted at unmount
-        (I'm getting to what i mean here.)
-        The directory /mnt/quarantine1 acts as a mount point for <b>tmpfs</b> -- which is a temporary storage. When it's unmounted, all data incuding the file will be wiped off,
-        which is an advantage.
-    </p>
+<p>
+    Malware attacks on devices are increasing daily, especially on systems owned by large organizations — ransomware being a prime example. 
+    After studying the nature of these attacks, I found that 60–70% are caused by the device owners or handlers themselves, 
+    often by downloading files without proper verification. While I don’t place all the blame on them (since not everyone understands how these things work), 
+    this is where <strong>Devock</strong> comes in.
+</p>
 
-    <br><br>
-    <h3>How to start</h3>
-    <p>
-        On downloading Devock, a script comes with it named <b>install.sh</b>
-        Run the script using bash
-        <div class="card mb-3" style="background-color: lightgrey;">
-        <div class="card-body">
-            <b>
-            ~$ sh install.sh <span style="color: blue">or, you make it executable</span> <br>
-            ~$ chmod +x install.sh <br>
-            ~$ ./install.sh <br>
-            </b>
-        </div>
-        </div>
-    </p>
+<p>
+    <strong>Devock Antivirus</strong> is a tool designed to prevent malicious software from infecting a device. Although this version is tailored for Linux, 
+    we’re currently working on Windows and macOS versions, which will be released soon.
+</p>
 
-    <p>
-        Configure your browser proxy to <b>127.0.0.1:8080</b> which is the default proxy for mitmproxy. <br>
-        Start up mitmproxy <br>
-        <div class="card mb-3" style="background-color: lightgrey;">
-            <div class="card-body">
-                <b>
-                ~$ mitmproxy <span style="color: blue">or</span> <br>
-                ~$ mitmweb
-                </b>
-            </div>
-        </div>
+<br><br>
+<h3>What Devock Does</h3>
+<p>
+    Devock operates at the network level using a Python module called <strong>mitmproxy</strong>, which allows it to intercept and analyze traffic entering and leaving a device.
+    It listens for responses from servers and detects whether the response contains a downloadable application or file.
+</p>
 
-    </p>
-    <p>
-        Head to <a href="http:mitm.it">mitm.it</a> to download a certificate (In this case, you'll be downloading for linux) which should 
-        end with <b><i>.pem</i></b>. Follow the instructions for the certificate. If you're downloading for firefox, you'll have to download 
-        the required certificate and also follow the instructions from the site. With this certificate, mitmproxy will be able to decrypt traffic (HTTPS)
-        inorder to analyze it's content.
-    </p>
-    <p>
-        After you've run <b>install.sh</b>, a systemd service file should be created. This should allow Devock run in the background even on reboot.
-        But incase of errors, you can run Devock manually using the <b>autorun.sh</b> file in the same folder as the install.sh file.
-        <div class="card mb-3" style="background-color: lightgrey;">
-            <div class="card-body">
-                <b>
-                ~$ sh autorun.sh <span style="color: blue">or</span> <br>
-                ~$ ./autorun.sh <span style="color: blue">(If the script is executable)</span> <br>
-                </b>
-            </div>
-        </div>
-        Now, as you browse, Devock will constantly check the files you download before allowing them in.
-    </p>
+<p>
+    When such a file is detected, Devock intercepts the traffic, copies the file bytes, and saves them in a quarantine directory at <code>/mnt/quarantine1</code>.
+    It then scans the file using <strong>ClamAV</strong> (via the <code>clamscan</code> utility), which checks for known malware signatures.
+</p>
 
-    <br><br>
-   <h3>What's Next?</h3>
-   <p>
-        We're planning on making Devock watch also at storage level. It should be included in the next release.
-   </p>
-   
-   <br><br>
-   <h4>DISCLAIMER</h4>
-   <b>
-        This work is distributed under the GNU GPL License which means the author will not be held resposible for any
-        damages that may arise from using, modifying or distributing the software. <br><br>
-        "In no event unless required by applicable law... will any contributor be liable... for damages arising out of the
-        use or inability to use the program..."
-   </b>
-{%endblock%}
+<p>
+    If malware is found, the scan returns <strong>FOUND</strong>; otherwise, it returns <strong>OK</strong>. 
+    Safe files are moved to the user’s Downloads folder, while malicious ones are deleted upon unmount.
+</p>
+
+<p>
+    The directory <code>/mnt/quarantine1</code> serves as a mount point for a <strong>tmpfs</strong> — a temporary storage filesystem.
+    When unmounted, all data within it, including any quarantined files, is erased — a useful security feature.
+</p>
+
+<br><br>
+<h3>How to Get Started</h3>
+<p>
+    After downloading Devock, you'll find a script named <code>install.sh</code>. Run it using:
+</p>
+<div class="card mb-3" style="background-color: lightgrey;">
+    <div class="card-body">
+        <b>
+            ~$ sh install.sh <span style="color: blue">or make it executable:</span><br>
+            ~$ chmod +x install.sh<br>
+            ~$ ./install.sh
+        </b>
+    </div>
+</div>
+
+<p>
+    Next, configure your browser’s proxy settings to <strong>127.0.0.1:8080</strong> — the default for mitmproxy.
+    Start mitmproxy using:
+</p>
+<div class="card mb-3" style="background-color: lightgrey;">
+    <div class="card-body">
+        <b>
+            ~$ mitmproxy <span style="color: blue">or</span><br>
+            ~$ mitmweb
+        </b>
+    </div>
+</div>
+
+<p>
+    Visit <a href="http://mitm.it">mitm.it</a> to download the necessary SSL certificate for Linux.
+    The certificate will typically have a <strong>.pem</strong> extension. Follow the provided instructions carefully.
+    For Firefox users, additional steps might be needed to install and trust the certificate. Once installed, mitmproxy can decrypt HTTPS traffic for inspection.
+</p>
+
+<p>
+    After running <code>install.sh</code>, a systemd service should be created, allowing Devock to run in the background and on system reboot.
+    If any issues arise, you can run Devock manually using the <code>autorun.sh</code> script located in the same directory:
+</p>
+<div class="card mb-3" style="background-color: lightgrey;">
+    <div class="card-body">
+        <b>
+            ~$ sh autorun.sh <span style="color: blue">or</span><br>
+            ~$ ./autorun.sh <span style="color: blue">(if executable)</span>
+        </b>
+    </div>
+</div>
+
+<p>
+    From this point onward, as you browse and download files, Devock will continuously inspect the files before allowing them onto your system.
+</p>
+
+<br><br>
+<h3>What’s Next?</h3>
+<p>
+    We're planning to extend Devock's capabilities to include storage-level monitoring in the next release.
+</p>
+
+<br><br>
+<h4>DISCLAIMER</h4>
+<b>
+    This work is distributed under the GNU GPL License, meaning the author is not liable for any damages resulting from the use, modification, or distribution of this software. <br><br>
+    “In no event unless required by applicable law... will any contributor be liable... for damages arising out of the use or inability to use the program...”
+</b>
+{% endblock %}
