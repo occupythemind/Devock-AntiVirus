@@ -1,0 +1,14 @@
+{%extends 'localadmin/base.html'%}
+{%block title%}Admin Panel{%endblock title%}
+{% block page_header %}
+<div class="jumbotron text-center">
+    <div class="container" style="background-color: aliceblue">
+        <h1 class="display-3">Welcome to Devock</h1>
+        <p>Devock is a powerful tool designed to help you detect and block malware on your system. With its advanced features and user-friendly interface, you can easily monitor your system for any suspicious activity and take action to protect your data.</p>
+        <a class="btn btn-primary btn-lg" href="{%url 'localadmin:docs'%}" role="button">Documentation &raquo;</a>
+    </div>
+</div>
+{% endblock page_header %}
+{%block content%}
+    
+{%endblock%}

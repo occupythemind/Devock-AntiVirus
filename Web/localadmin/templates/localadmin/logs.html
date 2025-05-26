@@ -1,0 +1,16 @@
+{%extends 'localadmin/base.html'%}
+{%block title%}Logs{%endblock title%}
+{%block page_header%}Devock Logs{%endblock page_header%}
+{%block content%}
+        <div class="card mb-3">
+            <h3 class="card-header">Last {{num}} Log messages.</h3>
+            <div class="card-body">
+                {%for msg in logs%}
+                    <p>{{msg}}</p>
+                {%empty%}
+                    <p>No logs available.</p>
+                {%endfor%}
+            </div>
+        </div>
+    
+{%endblock%}

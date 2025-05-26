@@ -1,0 +1,18 @@
+{%extends 'localadmin/base.html'%}
+{%block title%}Logs{%endblock title%}
+{%block page_header%}System Processes{%endblock page_header%}
+{%block content%}
+    <p class="card-header">{{head}}</p> <br>
+    
+        <div class="card mb-3">
+            <div class="card-body">
+                {%for process in processes%}
+                    {{process}} <br>
+                {%empty%}
+                    <p>No Process to show</p>
+                {%endfor%}
+            </div>
+        </div>
+    
+    
+{%endblock%}

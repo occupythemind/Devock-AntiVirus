@@ -1,0 +1,12 @@
+{%extends 'localadmin/base.html'%}
+{%block title%}Logs{%endblock title%}
+{%block page_header%}Devock Users{%endblock page_header%}
+{%block content%}
+    {%for u in users%}
+        <a class="nav-link" href="{%url 'localadmin:iuser' u.id%}"> {{u}} </a>
+        <hr/>
+    {%empty%}
+        <p>No logs available.</p>
+    {%endfor%}
+    
+{%endblock%}
