@@ -52,6 +52,7 @@ class Detect:
             logger.info(f"RESPONSE: FROM --> {flow.request.pretty_url}  GOT --> {filename}")
             filepath = quarantineFile(flow.response.content) # Store the file in safe mode
             # Thread the scanning process cause it usually takes time to respond
+            print('Scanner Started')
             scan_and_tell = threading.Thread(target=clamscan, args=(filepath, filename, flow.request.url))
             scan_and_tell.start()
             logger.info("Scanning started")
@@ -86,12 +87,15 @@ def quarantineFile(filebytes: bytes):
 
 def clamscan(filepath, newname, url):
     '''Takes the file path and scan it.'''
+    print('Scanning the file...')
     logger.info('Scanning the file...')
     output = subprocess.run(f'clamscan {filepath}'.split(),
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) 
     result = output.stdout
+    print('Scan Complete.')
     logger.info('Scan Complete.')
     if "FOUND" in result:
+        print('File seems malicious.')
         logger.info('File seems malicious.')
         info = "403 Malicious content detected!: Malicious content has been detected and has been blocked-(!ALERT!)"
         logger.info(info)
